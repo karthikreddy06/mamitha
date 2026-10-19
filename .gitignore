@@ -1,0 +1,39 @@
+# Dependencies
+node_modules/
+
+# Production Build Output
+dist/
+dist-ssr/
+*.local
+
+# Cache & Diagnostics
+.vite/
+*.tsbuildinfo
+.eslintcache
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.log
+
+# Environment variables (do not commit secrets)
+.env
+.env.*
+!.env.example
+
+# Editor & System Files
+.vscode/
+.idea/
+.claude/
+.DS_Store
+Thumbs.db
+
+# Root-level raw footage & source files (public/ and src/assets/ ship)
+/*.jpg
+/*.jpeg
+/*.png
+/*.avif
+/*.mp4
+/*.mov
