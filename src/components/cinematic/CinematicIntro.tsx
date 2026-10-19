@@ -255,7 +255,14 @@ export default function CinematicIntro({ onComplete }: { onComplete?: () => void
   const activeScene = SCENES[Math.min(currentStep, 2)]
 
   return (
-    <div className="fixed inset-0 h-svh w-screen overflow-hidden bg-[#F7F5F1] text-[#242424] flex flex-col justify-between select-none z-50">
+    <div
+      className={`fixed inset-0 h-svh w-screen bg-[#F7F5F1] text-[#242424] flex flex-col select-none z-50 ${
+        currentStep === 3
+          ? 'overflow-x-hidden overflow-y-auto overscroll-y-contain md:overflow-hidden md:justify-between'
+          : 'overflow-hidden justify-between'
+      }`}
+      style={currentStep === 3 ? { WebkitOverflowScrolling: 'touch' } : undefined}
+    >
       {/* =========================================================================
           ATMOSPHERIC BUTTERFLIES: Exactly two butterflies in outer margins
           Never covering Mamitha's face, the man's face, titles, or buttons
@@ -265,7 +272,7 @@ export default function CinematicIntro({ onComplete }: { onComplete?: () => void
       {/* =========================================================================
           TOP BAR: Brand Wordmark & Skip Intro Action (Only on Scenes 1, 2, 3)
           ========================================================================= */}
-      <header className="relative z-30 flex w-full items-center justify-between px-6 pt-4 sm:pt-6 pb-2 max-w-6xl mx-auto">
+      <header className="relative z-30 flex w-full items-center justify-between px-6 pt-4 sm:pt-6 pb-2 max-w-6xl mx-auto shrink-0">
         <span className="font-editorial text-base sm:text-lg tracking-[0.24em] text-[#242424] font-medium">
           MAMITHA BAIJU
         </span>
@@ -285,7 +292,13 @@ export default function CinematicIntro({ onComplete }: { onComplete?: () => void
       {/* =========================================================================
           CENTER VIEWPORT: Photographs (0-2) -> Video Interlude (3) -> Music Choice (4)
           ========================================================================= */}
-      <div className="relative z-20 flex flex-1 flex-col items-center justify-center min-h-0 w-full px-4 sm:px-6">
+      <div
+        className={`relative z-20 flex flex-1 flex-col items-center w-full px-4 sm:px-6 ${
+          currentStep === 3
+            ? 'justify-start md:justify-center md:min-h-0'
+            : 'justify-center min-h-0'
+        }`}
+      >
         <AnimatePresence mode="wait">
           {currentStep < 3 ? (
             /* =====================================================================
@@ -350,11 +363,14 @@ export default function CinematicIntro({ onComplete }: { onComplete?: () => void
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.985 }}
               transition={{ duration: 0.45, ease: [0.16, 0.7, 0.22, 1] }}
-              className="relative flex flex-1 flex-col items-center justify-center min-h-0 w-full max-w-6xl mx-auto my-auto px-2 sm:px-4 md:px-6"
+              className="relative flex flex-col items-center w-full max-w-6xl mx-auto py-4 md:py-0 md:my-auto md:justify-center md:flex-1 md:min-h-0 px-2 sm:px-4 md:px-6"
             >
-              {/* Three-part cinematic row: Left Photo | Center Video | Right Photo */}
-              <div className="relative flex flex-row items-center justify-center gap-2 sm:gap-3 md:gap-5 lg:gap-7 w-full max-w-6xl mx-auto my-auto">
-                {/* Left Photo: Mamitha wearing green blouse and cream saree, looking to the side */}
+              {/* Three-part cinematic layout:
+                  Mobile: Vertical stack (Top Photo -> Center Video -> Bottom Photo)
+                  Desktop: Horizontal row (Left Photo | Center Video | Right Photo) */}
+              <div className="relative flex flex-col md:flex-row items-center justify-center gap-6 sm:gap-7 md:gap-5 lg:gap-7 w-full max-w-6xl mx-auto md:my-auto">
+                {/* 1. Top Photo (Mobile) / Left Photo (Desktop):
+                    Mamitha wearing green blouse and cream saree, looking to the side */}
                 <motion.div
                   initial={{ opacity: 0, x: -16, scale: 0.96 }}
                   animate={{
@@ -369,9 +385,9 @@ export default function CinematicIntro({ onComplete }: { onComplete?: () => void
                     scale: { duration: 0.6, ease: [0.16, 0.7, 0.22, 1] },
                     y: { duration: 5.5, repeat: Infinity, ease: 'easeInOut' },
                   }}
-                  className="relative h-[34svh] sm:h-[42svh] md:h-[48svh] lg:h-[52svh] max-h-[520px] aspect-[736/1308] shrink-0"
+                  className="relative w-full max-w-[280px] sm:max-w-[320px] md:w-auto md:max-w-none md:h-[48svh] lg:h-[52svh] md:max-h-[520px] aspect-[736/1308] shrink-0"
                 >
-                  <div className="relative h-full w-full overflow-hidden rounded-xl sm:rounded-2xl border border-[rgba(36,36,36,0.09)] bg-[#EBE7DF] shadow-[0_18px_40px_-14px_rgba(36,36,36,0.15)] flex items-center justify-center">
+                  <div className="relative h-full w-full overflow-hidden rounded-2xl border border-[rgba(36,36,36,0.09)] bg-[#EBE7DF] shadow-[0_18px_40px_-14px_rgba(36,36,36,0.15)] flex items-center justify-center">
                     <img
                       src={imgInterludeLeft}
                       alt="Mamitha Baiju in green blouse and cream saree looking to the side"
@@ -381,8 +397,10 @@ export default function CinematicIntro({ onComplete }: { onComplete?: () => void
                   </div>
                 </motion.div>
 
-                {/* Center Video: Primary focal point, larger than either photo */}
-                <div className="relative flex items-center justify-center h-[42svh] sm:h-[50svh] md:h-[56svh] lg:h-[60svh] max-h-[600px] flex-1 max-w-[50vw] sm:max-w-[54vw] md:max-w-[560px] lg:max-w-[660px] shrink-0 overflow-hidden rounded-2xl sm:rounded-3xl border border-[rgba(36,36,36,0.12)] bg-[#121316] shadow-[0_24px_60px_-15px_rgba(0,0,0,0.32)]">
+                {/* 2. Middle Video:
+                    Mobile: Full-width container with 16/9 aspect ratio, watchable and large
+                    Desktop: Primary focal point, larger than either photo */}
+                <div className="relative flex items-center justify-center w-full max-w-[480px] sm:max-w-[540px] md:max-w-[560px] lg:max-w-[660px] aspect-video md:aspect-auto h-auto md:h-[56svh] lg:h-[60svh] md:max-h-[600px] md:flex-1 md:shrink-0 overflow-hidden rounded-2xl sm:rounded-3xl border border-[rgba(36,36,36,0.12)] bg-[#121316] shadow-[0_24px_60px_-15px_rgba(0,0,0,0.32)]">
                   <video
                     ref={setVideoNode}
                     src="/videos/mamitha-intro.mp4"
@@ -394,12 +412,12 @@ export default function CinematicIntro({ onComplete }: { onComplete?: () => void
                     onPlay={() => {
                       setAutoplayBlocked(false)
                     }}
-                    className="h-full w-auto max-h-full max-w-full object-contain block select-none"
+                    className="h-full w-full object-contain block select-none"
                   />
 
                   {/* Autoplay with sound blocked fallback */}
                   {autoplayBlocked && !videoError && (
-                    <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/60 backdrop-blur-sm p-6 text-center">
+                    <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/60 backdrop-blur-sm p-4 sm:p-6 text-center">
                       <motion.div
                         initial={{ opacity: 0, scale: 0.94 }}
                         animate={{ opacity: 1, scale: 1 }}
@@ -409,7 +427,7 @@ export default function CinematicIntro({ onComplete }: { onComplete?: () => void
                         <button
                           type="button"
                           onClick={handlePlayIntroWithSound}
-                          className="group flex cursor-pointer items-center justify-center gap-3 rounded-full bg-white px-7 py-3.5 font-ui text-[0.82rem] font-medium tracking-wide text-[#242424] shadow-2xl transition-all hover:bg-[#F7F5F1] hover:scale-105 active:scale-95"
+                          className="group flex cursor-pointer items-center justify-center gap-3 rounded-full bg-white px-6 sm:px-7 py-3 sm:py-3.5 font-ui text-[0.8rem] sm:text-[0.82rem] font-medium tracking-wide text-[#242424] shadow-2xl transition-all hover:bg-[#F7F5F1] hover:scale-105 active:scale-95"
                         >
                           <Volume2 className="h-4 w-4 text-[#242424] transition-transform group-hover:scale-110" />
                           <span>Play Intro with Sound</span>
@@ -420,9 +438,9 @@ export default function CinematicIntro({ onComplete }: { onComplete?: () => void
 
                   {/* Error fallback with retry */}
                   {videoError && (
-                    <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-[#F7F5F1] p-6 text-center">
-                      <div className="max-w-xs rounded-2xl border border-[rgba(36,36,36,0.1)] bg-white p-6 shadow-xl text-center">
-                        <p className="font-editorial text-lg text-[#242424] mb-1 font-medium">
+                    <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-[#F7F5F1] p-4 sm:p-6 text-center">
+                      <div className="max-w-xs rounded-2xl border border-[rgba(36,36,36,0.1)] bg-white p-5 sm:p-6 shadow-xl text-center">
+                        <p className="font-editorial text-base sm:text-lg text-[#242424] mb-1 font-medium">
                           Unable to play video
                         </p>
                         <p className="font-ui text-xs text-[#60646c] mb-4 leading-relaxed">
@@ -441,7 +459,8 @@ export default function CinematicIntro({ onComplete }: { onComplete?: () => void
                   )}
                 </div>
 
-                {/* Right Photo: Mamitha wearing cream-and-gold saree, looking toward camera */}
+                {/* 3. Bottom Photo (Mobile) / Right Photo (Desktop):
+                    Mamitha wearing cream-and-gold saree, looking toward camera */}
                 <motion.div
                   initial={{ opacity: 0, x: 16, scale: 0.96 }}
                   animate={{
@@ -456,9 +475,9 @@ export default function CinematicIntro({ onComplete }: { onComplete?: () => void
                     scale: { duration: 0.6, delay: 0.1, ease: [0.16, 0.7, 0.22, 1] },
                     y: { duration: 6, repeat: Infinity, ease: 'easeInOut', delay: 0.4 },
                   }}
-                  className="relative h-[34svh] sm:h-[42svh] md:h-[48svh] lg:h-[52svh] max-h-[520px] aspect-[288/512] shrink-0"
+                  className="relative w-full max-w-[280px] sm:max-w-[320px] md:w-auto md:max-w-none md:h-[48svh] lg:h-[52svh] md:max-h-[520px] aspect-[288/512] shrink-0"
                 >
-                  <div className="relative h-full w-full overflow-hidden rounded-xl sm:rounded-2xl border border-[rgba(36,36,36,0.09)] bg-[#EBE7DF] shadow-[0_18px_40px_-14px_rgba(36,36,36,0.15)] flex items-center justify-center">
+                  <div className="relative h-full w-full overflow-hidden rounded-2xl border border-[rgba(36,36,36,0.09)] bg-[#EBE7DF] shadow-[0_18px_40px_-14px_rgba(36,36,36,0.15)] flex items-center justify-center">
                     <img
                       src={imgInterludeRight}
                       alt="Mamitha Baiju in cream and gold saree looking toward camera"
@@ -470,7 +489,7 @@ export default function CinematicIntro({ onComplete }: { onComplete?: () => void
               </div>
 
               {/* Video Typography Subtitle */}
-              <div className="mx-auto mt-2 sm:mt-3 md:mt-4 flex max-w-xl flex-col items-center text-center px-4">
+              <div className="mx-auto mt-6 sm:mt-7 md:mt-4 flex max-w-xl flex-col items-center text-center px-4 pb-10 md:pb-0 shrink-0">
                 <span className="label mb-1 sm:mb-1.5 inline-flex items-center gap-1.5 rounded-full border border-[#D9A0AC]/35 bg-[#FBEAF0] px-3.5 py-0.5 sm:py-1 text-[0.62rem] sm:text-[0.66rem] tracking-[0.2em] text-[#A25B6C] uppercase font-semibold">
                   <Sparkles className="h-3 w-3 text-[#D9A0AC]" />
                   Cinematic Interlude

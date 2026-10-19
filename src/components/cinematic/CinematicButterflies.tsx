@@ -37,9 +37,9 @@ export default function CinematicButterflies() {
 
     const t = clockMs / 1000 // seconds
 
-    // ---- BUTTERFLY 1: Translucent Dusty Rose (Left Margin: 5% - 24% vw) ----
-    const marginL = isMobile ? 0.04 : 0.06
-    const spanL = isMobile ? 0.16 : 0.18
+    // ---- BUTTERFLY 1: Translucent Dusty Rose (Left Margin: outer gutter) ----
+    const marginL = isMobile ? 0.02 : 0.06
+    const spanL = isMobile ? 0.06 : 0.18
     const normX1 = marginL + spanL * (0.5 + 0.36 * Math.sin(t * 0.11 + 0.5) + 0.14 * Math.cos(t * 0.06 + 1.2))
     const normY1 = 0.44 + 0.16 * Math.sin(t * 0.095 + 1.8) + 0.05 * Math.cos(t * 0.16 + 0.4)
 
@@ -56,9 +56,9 @@ export default function CinematicButterflies() {
     b1Y.set(targetY1)
     b1Rotate.set(targetRot1)
 
-    // ---- BUTTERFLY 2: Translucent Lavender (Right Margin: 76% - 95% vw) ----
-    const marginR = isMobile ? 0.80 : 0.76
-    const spanR = isMobile ? 0.16 : 0.18
+    // ---- BUTTERFLY 2: Translucent Lavender (Right Margin: outer gutter) ----
+    const marginR = isMobile ? 0.92 : 0.76
+    const spanR = isMobile ? 0.06 : 0.18
     const normX2 = marginR + spanR * (0.5 + 0.34 * Math.cos(t * 0.1 + 2.4) + 0.15 * Math.sin(t * 0.055 + 0.7))
     const normY2 = 0.48 + 0.15 * Math.sin(t * 0.088 + 0.8) + 0.05 * Math.cos(t * 0.15 + 2.1)
 
@@ -75,13 +75,13 @@ export default function CinematicButterflies() {
     b2Rotate.set(targetRot2)
   })
 
-  const size1 = isMobile ? 24 : 34
-  const size2 = isMobile ? 26 : 38
+  const size1 = isMobile ? 22 : 34
+  const size2 = isMobile ? 24 : 38
 
   return (
     <div
       aria-hidden="true"
-      className="pointer-events-none fixed inset-0 z-30 overflow-hidden"
+      className="pointer-events-none fixed inset-0 z-10 overflow-hidden"
     >
       {/* Butterfly 1: Translucent Dusty Rose (Left margin only) */}
       <motion.div
